@@ -1,7 +1,7 @@
 void setup(){
   size(1600,1000,P3D);
 }
-
+//6
 void draw(){
   background(50);
   translate(1000,500,100);
