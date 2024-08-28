@@ -2,17 +2,17 @@ void
 settings()
 {
  System.setProperty("jogl.disable.openglcore","false");
- size(800, 800, P3D);
+ size(1000, 600, P3D);
 } 
 
 void draw(){
   background(120);
-  camera(600, 401, -2068, 600, 401, -154, 0.0, 0.8, 0.0);
+  camera(600, 401, -1722, 600, 401, -154, 0.0, 0.8, 0.0);
   rotateX(0.01*PI);
   rotateY(0.00*PI);
   rotateZ(0.00*PI);
   fill(177,47,47);
-  cubo(400,400, 0, 400,400,598,0.0,0.0,0.0);// corpo principipal
+  cubo(400,400, 0, 1288,632,506,-2.6,0.0,0.0);// corpo principipal
  
   
 }
