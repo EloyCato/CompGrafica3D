@@ -7,7 +7,7 @@ float selectorPosX = 0;
 boolean movingRight = true;
 
 void setup() {
-  size(1000, 800, P3D);
+  size(1000, 600, P3D);
   for (int i = 0; i < numBars; i++) {
     float intensity = map(abs(i - numBars/2), 0, numBars/2, 255, 30); // Degradê mais forte nas extremidades
     barColors[i] = color(intensity, 255, intensity);  // Efeito fluorescente
@@ -38,13 +38,13 @@ void draw() {
   stroke(255);
   strokeWeight(2);
   for (int i = 0; i <= numBars; i++) {
-    float x = i * barWidth - 500 / 2 + barWidth/2;
+    float x = i * barWidth - 520 / 2 + barWidth/2;
     line(width/2 + x, height/2 + 80, width/2 + x, height/2 + 70);
   }
   
   // Desenhar a régua de frequências FM (abaixo) como traços
   for (int i = 0; i <= numBars; i++) {
-    float x = i * barWidth - 500 / 2 + barWidth / 2;
+    float x = i * barWidth - 520 / 2 + barWidth / 2;
     line(width/2 + x, height/2 , width/2 + x, height/2 + 10);
   }
   
