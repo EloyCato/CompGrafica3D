@@ -5,6 +5,7 @@ float maxHeight = 60;
 float barWidth = 500.0 / numBars;
 float selectorPosX = 0;
 boolean movingRight = true;
+int sensibilidade;//sensibilidade da variação do cursor
 
 void settings()
 {
@@ -17,6 +18,19 @@ void settings()
   }
 } 
 
+color neon = color(51, 232, 254);
+color corpo = color(233, 31, 60);
+color corpo2 = color(150, 10, 30);
+PGraphics pg;
+int boca_width = 250;
+int boca_hight = 255;
+int Cursor = 0;
+boolean AM = false, FM = false, ligado = false;
+
+// Variáveis de controle de volume
+int volumeLevel = 1;
+float[] volumeValues = {0.0, 0.25, 0.5, 0.75, 1.0};
+
 void draw(){
   background(120);
   camera(9, -77, 839, 274, 199, 239, 0.0, 0.6, 0.0);
@@ -28,7 +42,7 @@ void draw(){
   fill(59,47,177);//azul
   cubo(50,-30, 50, 500,400,200,0.0,0.0,0.0);// corpo topo
   fill(69,177,47);//verde
-  cubo(50,50, -30, 500,300,360,0.0,0.0,0.0);// corpo frente/atras
+  cubo(50,50, -30, 500,300,360,0.0,0.0,0.0);// corpo frente/atras //Entre 50 e 550 em x ; Entre 50 e 350 em y
   fill(175,47,177);//roxo
   cubo(-30,50, 50, 660,300,200,0.0,0.0,0.0);// corpo esqueda/direita
   //rampas parte de cima
@@ -116,13 +130,14 @@ void draw(){
   quina(50,0, 250, 50,30,50,4.0,0.0,-4.0);
   fill(0,0,255);
   quina(0,50, 250, 50,30,50,2.0,4.0,2.0);
-
+  
+  pushMatrix();
   //background(20);
   lights();
   ambientLight(50, 50, 50);
   
   pushMatrix();// Posiciona e orienta a face da rampa
-  translate(-113, -316, 224);   // Posição da rampa
+  translate(-113, -316, 224); // Posição da rampa
   rotateX(PI/6.4);          // Rotação em torno do eixo X
   rotateY(PI/37.8); 
   // Desenhar as barras do histograma
@@ -137,7 +152,7 @@ void draw(){
     box(barWidth - 2, barHeights[i], 10);
     popMatrix();
   }
-  
+  popMatrix();
   // Desenhar a régua de frequências AM (acima) como traços
   stroke(255);
   strokeWeight(2);
@@ -165,13 +180,21 @@ void draw(){
     selectorPosX -= 2;
     if (selectorPosX < -250) movingRight = true;
   }
-  
   popMatrix();  // Finaliza a orientação da rampa
-  
+  //cubo(50,50, -30, 500,300,360,0.0,0.0,0.0);// corpo frente/atras //Entre 50 e 550 em x ; Entre 50 e 350 em y
+  translate(0, 0, 331);
+  fill(corpo);
+  rect(400, 73, 510, 42, 40); // controle de volume
+  noFill();
+  line(410, 94, 500, 94);
+  fill(100);
+  rect(209+volumeLevel*33, 79, 53, 30, 13); // botão de volume
   fill(255);
-  textSize(12);
-  textAlign(CENTER, CENTER);
-  text("Multimídia Display", width/2, height/2 + 100);
+  stroke(0);
+  for (int i = 0; i < 5; i++) { // Barras de indicação do volume
+  rect(552 + 16 * i, 65 - (i * 7), 10, 7 * i);
+  }
+  
 }
 
 void rampa(int pX, int pY, int pZ, int lX, int lY, int lZ, float rX, float rY, float rZ){
