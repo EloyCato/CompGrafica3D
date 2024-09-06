@@ -1,8 +1,16 @@
+import ddf.minim.*;
+import ddf.minim.ugens.*;
+
+Minim minim;
+AudioPlayer player;
+String currentStation = "";
+AudioMetaData ProcuraRuido;
+
 int numBars = 20;
 float[] barHeights = new float[numBars];
 color[] barColors = new color[numBars];
-float maxHeight = 60;
-float barWidth = 500.0 / numBars;
+float maxHeight = 30;
+float barWidth = 400.0 / numBars;
 float selectorPosX = 0;
 boolean movingRight = true;
 int sensibilidade;//sensibilidade da variação do cursor
@@ -15,6 +23,7 @@ void settings()
     float intensity = map(abs(i - numBars/2), 0, numBars/2, 255, 30); // Degradê mais forte nas extremidades
     barColors[i] = color(intensity, 255, intensity);  // Efeito fluorescente
     barHeights[i] = random(maxHeight / 4); // Inicializa as alturas
+    
   }
 } 
 
@@ -33,10 +42,12 @@ float[] volumeValues = {0.0, 0.25, 0.5, 0.75, 1.0};
 
 void draw(){
   background(120);
-  camera(9, -77, 839, 274, 199, 239, 0.0, 0.6, 0.0);
-  rotateX(0.00*PI);
-  rotateY(-0.01*PI);
-  rotateZ(0.00*PI);
+  camera(9, -77, 874, 274, 199, 239, 0.0, 0.6, 0.0);
+  rotateX(0.06*PI);
+  rotateY(-0.09*PI);
+  rotateZ(0.02*PI);
+  
+  pg = createGraphics(880, 600);
   fill(177,47,47);//vermelho
   cubo(0,0, 0, 600,400,300,0.0,0.0,0.0);// corpo principipal
   fill(59,47,177);//azul
@@ -136,34 +147,21 @@ void draw(){
   lights();
   ambientLight(50, 50, 50);
   
-  pushMatrix();// Posiciona e orienta a face da rampa
-  translate(-113, -316, 224); // Posição da rampa
-  rotateX(PI/6.4);          // Rotação em torno do eixo X
-  rotateY(PI/37.8); 
-  // Desenhar as barras do histograma
-  for (int i = 0; i < numBars; i++) {
-    float x = i * barWidth - 500 / 2 + barWidth / 2;
-    float pulseFactor = map(abs(i-numBars/2), 0, numBars/2, 1, 1.5);  // Mais pulsação nas extremidades
-    barHeights[i] = lerp(barHeights[i], random(maxHeight * pulseFactor), 0.1);
-    
-    pushMatrix();
-    translate(width/2 + x, height/2 - 10 - barHeights[i] / 2);  // Somente pulsação para cima
-    fill(barColors[i]);
-    box(barWidth - 2, barHeights[i], 10);
-    popMatrix();
-  }
-  popMatrix();
+  
+  desenhaOlhosEMoca();
+  translate(-23, -70, -287);
+  
   // Desenhar a régua de frequências AM (acima) como traços
   stroke(255);
   strokeWeight(2);
-  for (int i = 0; i <= numBars; i++) {
-    float x = i * barWidth - 520 / 2 + barWidth/2;
+  for (int i = 0; i <= numBars; i++){
+    float x = i * barWidth - 503 / 2 + barWidth/2;
     line(width/2 + x, height/2 + 80, width/2 + x, height/2 + 70);
   }
   
-  // Desenhar a régua de frequências FM (abaixo) como traços
+  //Desenhar a régua de frequências FM (abaixo) como traços
   for (int i = 0; i <= numBars; i++) {
-    float x = i * barWidth - 520 / 2 + barWidth / 2;
+    float x = i * barWidth - 508 / 2 + barWidth / 2;
     line(width/2 + x, height/2 , width/2 + x, height/2 + 10);
   }
   
@@ -175,25 +173,131 @@ void draw(){
   // Movimentação da barra de seleção
   if (movingRight) {
     selectorPosX += 2;
-    if (selectorPosX > 250) movingRight = false;
+    if (selectorPosX > 200) movingRight = false;
   } else {
     selectorPosX -= 2;
-    if (selectorPosX < -250) movingRight = true;
+    if (selectorPosX < -200) movingRight = true;
   }
   popMatrix();  // Finaliza a orientação da rampa
   //cubo(50,50, -30, 500,300,360,0.0,0.0,0.0);// corpo frente/atras //Entre 50 e 550 em x ; Entre 50 e 350 em y
   translate(0, 0, 331);
   fill(corpo);
-  rect(400, 73, 510, 42, 40); // controle de volume
+  rect(424, 131, 224, 41, 40); // controle de volume
   noFill();
-  line(410, 94, 500, 94);
-  fill(100);
-  rect(209+volumeLevel*33, 79, 53, 30, 13); // botão de volume
+  fill(128);
+  rect(325+volumeLevel*33, 131, 53, 30, 24); // botão de volume
+  rect(171, 198, 222, 254, 27); // saída de som maior
+  line(333, 130, 513, 130);
   fill(255);
   stroke(0);
   for (int i = 0; i < 5; i++) { // Barras de indicação do volume
-  rect(552 + 16 * i, 65 - (i * 7), 10, 7 * i);
+  rect(442 + 16 * i, 105 - (i * 5), 10, 9 * i);
   }
+  
+  fill(corpo2);
+  rect(519, 191, 25, 25, 10); // botão AM
+  rect(519, 224, 25, 25, 10); // botão FM
+  fill(corpo);
+  ellipse(428, 256, 100, 100); // controle de frequencia do rádio
+  strokeWeight(4);
+  stroke(0);
+  line(469, 258, 387, 258); // botão de frequência
+  line(430, 301, 429, 214); // botão de frequência
+  fill(0);
+  textSize(16);
+  text("volume", 324, 81);
+  textSize(12);
+  fill(corpo2);
+  noStroke();
+  rect(338, 96, 14, -14, 2);
+  rect(366, 96, 14, -14, 2);
+  fill(0);
+  text("-  |  +", 334, 100);
+  //text("195.8Mhz", 393, 177);
+  //text("188.5Mhz", 509, 377);
+  text("FM", 511, 250);
+  text("AM", 511, 175);
+  text("ON/OFF", 150, -18);
+  triangle(361+volumeLevel*14, 135, 470+volumeLevel*-131, 148, 358+volumeLevel*-18, 116); // seta de volume
+  fill(250);
+  stroke(neon);
+  
+  pg.beginDraw();
+  pg.noFill();
+  pg.stroke(neon);
+  pg.rect(55, 66, 231, 261, 30); // contorno saída de som maior
+  pg.line(825, 76, 734, 76);
+  pg.strokeWeight(2);
+  pg.fill(neon);
+  pg.filter(BLUR, 0.7);
+  pg.endDraw();
+  image(pg, 0, 0);
+  
+  
+  //New
+  if (ligado == true) {
+    stroke(0);
+    strokeWeight(3);
+    fill(neon);
+    rect(104, 1, 41, 19, 28, 34, 0, 0); // botão de ligar
+    rect(754, 147, 25, 25, 10); // botão AM
+    rect(754, 184, 25, 25, 10); // botão FM
+    
+    if (AM == true) {
+      fill(255,255,0);
+      rect(754, 147, 25, 25, 10); // botão AM
+    }
+    if (FM == true) {
+      fill(255,255,0);
+      rect(754, 184, 25, 25, 10); // botão FM
+    }
+  }
+  if (keyPressed == true) {
+    if (ligado == true) {
+      if (key == 'a' || key == 'A') {
+        AM = true;
+        FM = false;
+        Cursor = 0;
+        tuneRadio();
+      } else if (key == 'f' || key == 'F') {
+        FM = true;
+        AM = false;
+        Cursor = 0;
+        tuneRadio();
+      }
+    }
+  }
+  sensibilidade=3;//mude o valor para cursor para aumentar a velocidade, apenas valores inteiros, preferência para valores que dividem 45 sem resto(1, 3, 5, 7, 9, etc...) para não gerar incosistência
+  if (keyPressed == true) {
+     if (AM == true) {
+       if ((key== '4' || keyCode == LEFT) &&  Cursor > -45) {
+         Cursor = Cursor - sensibilidade;
+         tuneRadio();
+       }
+       if ((key== '6' || keyCode == RIGHT) && Cursor < 0) {
+         Cursor = Cursor + sensibilidade;
+         tuneRadio();
+       }
+     }
+     if (FM == true) {
+       if ((key== '6' || keyCode == RIGHT) && Cursor < 45) {
+         Cursor = Cursor + sensibilidade;
+         tuneRadio();
+       }
+       if ((key== '4' || keyCode == LEFT) && Cursor > 0) {
+         Cursor = Cursor - sensibilidade;
+         tuneRadio();
+       }
+     }
+  }
+  translate(567, 270);
+  rotate(PI * Cursor / 45);
+  fill(0);
+  stroke(0);
+  triangle(-10, -68, 0, -84, 10, -69); // seta que indica frequência
+  line(0, -75, 0, 75); // botão de frequência
+  line(-75, 0, 75, 0); // botão de frequência
+}
   
 }
 
@@ -292,4 +396,98 @@ void cubo(int pX, int pY, int pZ, int lX, int lY, int lZ, float rX, float rY, fl
   rotateZ(rZ*QUARTER_PI);
   box(lX, lY,lZ);
   popMatrix();
+}
+
+void desenhaOlhosEMoca() {
+  // Desenha olhos e boca baseados no estado do rádio
+  if (ligado ) { // Se estiver ligado e sintonizado
+    if ((AM || FM) && player != null) {
+      if(player.getMetaData().fileName()=="radio_noise.mp3"){
+        desenhaOlhosAbertos();
+        desenhaBocaTriste();
+      }else{
+        desenhaOlhosFelizes();
+        desenhaBocaFeliz();
+      }
+    }
+    if(!AM && !FM){
+      desenhaOlhosAbertos();
+      desenhaBocaFechada();
+    }
+  } else {
+    desenhaOlhosFechados();
+    desenhaBocaFechada();
+  }
+}
+
+void desenhaOlhosFechados() {
+  translate(0, 0, 331);
+  
+  fill(255);
+  stroke(0);
+  strokeWeight(5);
+  line(80, 135, 120, 135);
+  line(199, 135, 240, 135);
+  //ellipse(180, 150, 60, 30); // Olho esquerdo
+  //ellipse(320, 150, 60, 30); // Olho direito
+  fill(0);
+  //ellipse(180, 155, 30, 10); // Pupila olho esquerdo
+  //ellipse(320, 155, 30, 10); // Pupila olho direito
+}
+
+void desenhaOlhosAbertos(){
+  translate(0, 0, 331);
+  fill(255);
+  stroke(0);
+  strokeWeight(5);
+  ellipse(180, 150, 80, 80);//Olho esquerdo
+  ellipse(320, 150, 80, 80);//Olho direito
+  fill(0);
+  ellipse(180, 160, 40, 40);//Pupila olho esquerdo
+  ellipse(320, 160, 40, 40);//Pupila olho direito
+  fill(255);
+  ellipse(186, 169, 20, 20);//Brilho olho esquerdo
+  ellipse(314, 169, 20, 20);//Brilho olho direito
+}
+
+void desenhaOlhosFelizes(){
+  translate(0, 0, 331);
+  fill(255);
+  stroke(0);
+  strokeWeight(5);
+  ellipse(180, 150, 80, 80);//Olho esquerdo
+  ellipse(320, 150, 80, 80);//Olho direito
+  fill(0);
+  ellipse(180, 150, 40, 40);//Pupila olho esquerdo
+  ellipse(320, 150, 40, 40);//Pupila olho direito
+  fill(255);
+  ellipse(169, 144, 20, 20);//Brilho olho esquerdo
+  ellipse(309, 144, 20, 20);//Brilho olho direito
+}
+
+void desenhaBocaFechada(){
+  translate(0, 0, 335);
+  stroke(0);
+  strokeWeight(5);
+  noFill();
+  line(303, 176, 277, 176);
+  //arc(250, 300, 100, 50, 0, PI); //Boca fechada
+}
+
+void desenhaBocaTriste(){
+  translate(0, 0, 331);
+  fill(corpo);
+  stroke(0);
+  strokeWeight(5);
+  arc(boca_width, boca_hight, 130, 60, PI, 2*PI); //Boca triste
+  line(boca_width - 65, boca_hight, boca_width + 65, boca_hight); //Linha da boca triste
+}
+
+void desenhaBocaFeliz(){
+  translate(0, 0, 331);
+  fill(neon);
+  stroke(0);
+  strokeWeight(5);
+  arc(boca_width, boca_hight, 130, 60, 0, PI); //Boca feliz
+  line(boca_width - 65, boca_hight, boca_width + 65, boca_hight); //Linha da boca feliz
 }
