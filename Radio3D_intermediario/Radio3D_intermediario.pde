@@ -2,7 +2,7 @@ void settings()
 {
   System.setProperty("jogl.disable.openglcore","false");
   size(800, 600, P3D);
-  PImage grade = loadImage("gradeDeAltoFalante.jpg");
+  //PImage grade = loadImage("gradeDeAltoFalante.jpg");
 } 
 PImage grade;
 
@@ -27,11 +27,12 @@ void draw(){
   background(50);
   ambientLight(233,234,230);
   directionalLight(207, 216, 230, -103, 48, -60);
+  perspective();
   noStroke();
   pushMatrix();
-  camera(350, -48, 888, 377, 189, 249, 0.0, 0.6, 0.0);
+  camera(350, -48, 1075, 377, 189, 249, 0.0, 0.6, 0.0);
   rotateX(0.00*PI);
-  rotateY(0.00*PI);
+  rotateY(-0.00*PI);
   rotateZ(0.00*PI);
   fill(198,170,16);
   cubo(220,-50,168,260,75,163,0.4,0.0,0.0);
@@ -51,7 +52,12 @@ void draw(){
   rampa(645,0, 250, 55,32,51,0.0,4.0,0.0);
   beginShape();
   
-  translate(-54, -371, 332);
+  pushMatrix();
+  translate(-180, -383, 146);
+  //translate(220,-50,168);
+  translate(260/2,75/2,163/2);
+  
+  rotateX(0.4*QUARTER_PI);
   // Desenhar a régua de frequências AM (acima) como traços
   stroke(255);
   strokeWeight(2);
@@ -81,8 +87,56 @@ void draw(){
   }
   popMatrix();
   
-  //pushMatrix();
-  //translate(0, 0, 701);
+  // Rosto criativo nas coordenadas (50, 50, -30)
+  pushMatrix();
+  translate(109, -33, 336);
+  desenhaRosto();
+  popMatrix();
+  
+  popMatrix();
+
+}
+
+void desenhaRosto() {
+  desenhaOlhosAbertos();
+  desenhaBocaAnimada();
+}
+
+void desenhaOlhosAbertos() {
+  fill(250);
+  stroke(0);
+  strokeWeight(5);
+  ellipse(180, 150, 80, 80);  // Olho esquerdo
+  translate(0, 0, 0.5);
+  fill(0);
+  ellipse(180, 162, 40, 40);  // Pupila olho esquerdo
+  translate(0, 0, 1);
+  fill(255);
+  ellipse(186, 169, 20, 20);  // Brilho olho esquerdo
+  
+  translate(-14, 0, 0);
+  
+  fill(250);
+  stroke(0);
+  strokeWeight(5);
+  ellipse(320, 150, 80, 80);  // Olho direito
+  translate(0, 0, 0.5);
+  fill(0);
+  ellipse(320, 160, 40, 40);  // Pupila olho direito
+  translate(0, 0, 1);
+  fill(255);
+  ellipse(314, 169, 20, 20);  // Brilho olho direito
+}
+
+void desenhaBocaAnimada() {
+  float time = millis() / 1000.0;
+  float smileOffset = sin(time) * 0;
+
+  fill(255, 0, 0);
+  stroke(0);
+  strokeWeight(5);
+  arc(boca_width, boca_hight + smileOffset, 130, 60, 0, PI);  // Boca animada
+  line(boca_width - 65, boca_hight + smileOffset, boca_width + 65, boca_hight + smileOffset);  // Linha da boca
 }
 
 void rampa(int pX, int pY, int pZ, int lX, int lY, int lZ, float rX, float rY, float rZ){
@@ -95,22 +149,22 @@ void rampa(int pX, int pY, int pZ, int lX, int lY, int lZ, float rX, float rY, f
   beginShape();
   vertex(lX,0,-lZ);
   vertex(0,0,-lZ);
-  vertex(0,-lY,0);
-  vertex(lX,-lY,0);
-  endShape();
+  vertex(0,-lY,0); //<>//
+  vertex(lX,-lY,0); //<>//
+  endShape(); //<>//
   
   beginShape();
-  vertex(0,-lY,0);
-  vertex(lX,-lY,0);
-  vertex(lX,0,0);
+  vertex(0,-lY,0); //<>//
+  vertex(lX,-lY,0); //<>//
+  vertex(lX,0,0); //<>//
   vertex(0,0,0);
   endShape();
   
   beginShape();
   vertex(0,0,0);
-  vertex(lX,0,0);
-  vertex(lX,0,-lZ);
-  vertex(0,0,-lZ);
+  vertex(lX,0,0); //<>//
+  vertex(lX,0,-lZ); //<>//
+  vertex(0,0,-lZ); //<>//
   endShape();
   
   beginShape();
@@ -135,26 +189,26 @@ void quina(int pX, int pY, int pZ, int lX, int lY, int lZ, float rX, float rY, f
   translate(pX,pY,pZ);
   rotateX(rX*QUARTER_PI);
   rotateY(rY*QUARTER_PI);
-  rotateZ(rZ*QUARTER_PI);
-  
+  rotateZ(rZ*QUARTER_PI); //<>//
+   //<>//
   beginShape();
   vertex(0,0,0);
   vertex(0,-lY,0);
-  vertex(0,0,-lZ);
-  endShape();
+  vertex(0,0,-lZ); //<>// //<>//
+  endShape(); //<>// //<>//
   
-  beginShape();
-  vertex(0,0,-lZ);
-  vertex(0,-lY,0);
-  vertex(lX,0,-lZ);
-  endShape();
-  
-  beginShape(); //<>// //<>// //<>// //<>//
+  beginShape(); //<>//
+  vertex(0,0,-lZ); //<>//
+  vertex(0,-lY,0); //<>// //<>// //<>//
+  vertex(lX,0,-lZ); //<>// //<>//
+  endShape(); //<>//
+   //<>//
+  beginShape(); //<>// //<>// //<>// //<>// //<>//
   vertex(0,-lY,0); //<>// //<>// //<>// //<>// //<>//
   vertex(lX,0,0); //<>//
   vertex(lX,0,-lZ);
-  endShape();
-  
+  endShape(); //<>//
+   //<>//
   beginShape();
   vertex(0,-lY,0);
   vertex(lX,0,0);
@@ -180,20 +234,20 @@ void drawCylinder( int pX, int pY, int pZ, int sides, float r, float h, float rX
     rotateZ(rZ*QUARTER_PI);
     float xT, yT;
     float angle = 360 / sides;
-    float halfHeight = h / 2;
+    float halfHeight = h / 2; //<>//
     // draw top shape
     beginShape();
-    texture(img);
-    textureMode(NORMAL);
-    for (int i = 0; i < sides; i++) {
-        float x = cos( radians( i * angle ) ) * r;
+    texture(img); //<>//
+    textureMode(NORMAL); //<>//
+    for (int i = 0; i < sides; i++) { //<>// //<>//
+        float x = cos( radians( i * angle ) ) * r; //<>//
         float y = sin( radians( i * angle ) ) * r;
-        xT=map(cos( radians( i * angle )),-1,1,0,1);
-        yT=map(sin( radians( i * angle )),-1,1,0,1); //<>// //<>//
-        vertex( x, y, -halfHeight,xT,yT); //<>// //<>// //<>//
-    }
+        xT=map(cos( radians( i * angle )),-1,1,0,1); //<>//
+        yT=map(sin( radians( i * angle )),-1,1,0,1); //<>// //<>// //<>//
+        vertex( x, y, -halfHeight,xT,yT); //<>// //<>// //<>// //<>//
+    } //<>//
     endShape(CLOSE);
-    // draw bottom shape
+    // draw bottom shape //<>//
     beginShape(); //<>// //<>// //<>// //<>//
     texture(grade); //<>//
     for (int i = 0; i < sides; i++) {
@@ -228,9 +282,9 @@ void drawCylinder( int pX, int pY, int pZ, int sides, float r, float h, float rX
     rotateY(rY*QUARTER_PI);
     rotateZ(rZ*QUARTER_PI);
     float angle = 360 / sides;
-    float halfHeight = h / 2;
+    float halfHeight = h / 2; //<>//
     // draw top shape
-    beginShape();
+    beginShape(); //<>//
     for (int i = 0; i < sides; i++) {
         float x = cos( radians( i * angle ) ) * r;
         float y = sin( radians( i * angle ) ) * r;
@@ -366,95 +420,4 @@ void caixaRadio(){
   
   quina(0,50, 250, 50,30,50,2.0,4.0,2.0);
 
-}
-
-void desenhaOlhosEMoca() {
-  // Desenha olhos e boca baseados no estado do rádio
-  if (ligado ) { // Se estiver ligado e sintonizado
-    if ((AM || FM) && player != null) {
-      if(player.getMetaData().fileName()=="radio_noise.mp3"){
-        desenhaOlhosAbertos();
-        desenhaBocaTriste();
-      }else{
-        desenhaOlhosFelizes();
-        desenhaBocaFeliz();
-      }
-    }
-    if(!AM && !FM){
-      desenhaOlhosAbertos();
-      desenhaBocaFechada();
-    }
-  } else {
-    desenhaOlhosFechados();
-    desenhaBocaFechada();
-  }
-}
-
-void desenhaOlhosFechados() {
-  // Olhos fechados estilo Mario
-  fill(255);
-  stroke(0);
-  strokeWeight(5);
-  line(150, 135, 210, 135);
-  line(290, 135, 350, 135);
-  //ellipse(180, 150, 60, 30); // Olho esquerdo
-  //ellipse(320, 150, 60, 30); // Olho direito
-  fill(0);
-  //ellipse(180, 155, 30, 10); // Pupila olho esquerdo
-  //ellipse(320, 155, 30, 10); // Pupila olho direito
-}
-
-void desenhaOlhosAbertos(){
-  fill(255);
-  stroke(0);
-  strokeWeight(5);
-  ellipse(180, 150, 80, 80);//Olho esquerdo
-  ellipse(320, 150, 80, 80);//Olho direito
-  fill(0);
-  ellipse(180, 160, 40, 40);//Pupila olho esquerdo
-  ellipse(320, 160, 40, 40);//Pupila olho direito
-  fill(255);
-  ellipse(186, 169, 20, 20);//Brilho olho esquerdo
-  ellipse(314, 169, 20, 20);//Brilho olho direito
-}
-
-void desenhaOlhosFelizes(){
-  fill(255);
-  stroke(0);
-  strokeWeight(5);
-  ellipse(180, 150, 80, 80);//Olho esquerdo
-  ellipse(320, 150, 80, 80);//Olho direito
-  fill(0);
-  ellipse(180, 150, 40, 40);//Pupila olho esquerdo
-  ellipse(320, 150, 40, 40);//Pupila olho direito
-  fill(255);
-  ellipse(169, 144, 20, 20);//Brilho olho esquerdo
-  ellipse(309, 144, 20, 20);//Brilho olho direito
-}
-
-void desenhaBocaFechada(){
-  // Boca fechada estilo Mario
-  stroke(0);
-  strokeWeight(5);
-  noFill();
-  line(200, 250, 300, 250);
-  //arc(250, 300, 100, 50, 0, PI); //Boca fechada
-}
-
-void desenhaBocaTriste(){
-  // Boca triste estilo Mario
-  fill(corpo);
-  stroke(0);
-  strokeWeight(5);
-  arc(boca_width, boca_hight, 130, 60, PI, 2*PI); //Boca triste
-  line(boca_width - 65, boca_hight, boca_width + 65, boca_hight); //Linha da boca triste
-}
-
-void desenhaBocaFeliz(){
-  // Boca feliz estilo Mario
-  fill(neon);
-  stroke(0);
-  strokeWeight(5);
-  arc(boca_width, boca_hight, 130, 60, 0, PI); //Boca feliz
-  line(boca_width - 65, boca_hight, boca_width + 65, boca_hight); //Linha da boca feliz
 }
