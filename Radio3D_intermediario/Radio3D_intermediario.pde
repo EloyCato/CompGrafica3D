@@ -6,10 +6,20 @@
 } */
 
 void setup(){
-   size(1200, 800, P3D);
+   size(800, 600, P3D);
 }
 
 int[] controle = {0,0,0};
+int numBars = 15;
+float[] barHeights = new float[numBars];
+color[] barColors = new color[numBars];
+float maxHeight = 60;
+float barWidth = 240.0 / numBars;
+float selectorPosX = 0;
+boolean movingRight = true;
+int boca_width = 250;
+int boca_hight = 255;
+int Cursor = 0;
 
 void draw(){
   float s;
@@ -70,8 +80,50 @@ void draw(){
   fill(0,0,255);
   rampa(645,0, 250, 55,32,51,0.0,4.0,0.0);
   beginShape();
-  popMatrix();
+  
+  pushMatrix();
+  translate(-180, -383, 146);
+  //translate(220,-50,168);
+  translate(260/2,75/2,163/2);
+  
+  rotateX(0.4*QUARTER_PI);
+  // Desenhar a régua de frequências AM (acima) como traços
+  stroke(255);
+  strokeWeight(2);
+  for (int i = 0; i <= numBars; i++) {
+    float x = i * barWidth - 260 / 2 + barWidth/2;
+    line(width/2 + x, height/2 + 40, width/2 + x, height/2 + 48);
   }
+  
+  // Desenhar a régua de frequências FM (abaixo) como traços
+  for (int i = 0; i <= numBars; i++) {
+    float x = i * barWidth - 260 / 2 + barWidth / 2;
+    line(width/2 + x, height/2 , width/2 + x, height/2 + 10);
+  }
+  
+  // Desenhar a barra de seleção
+  fill(255, 0, 0);
+  rectMode(CENTER);
+  rect(width/2 + selectorPosX, height/2 + 22, 5, 46);
+  
+  // Movimentação da barra de seleção
+  if (movingRight) {
+    selectorPosX += 2;
+    if (selectorPosX > 120) movingRight = false;
+  } else {
+    selectorPosX -= 2;
+    if (selectorPosX < -120) movingRight = true;
+  }
+  popMatrix();
+  
+  // Rosto criativo nas coordenadas (50, 50, -30)
+  pushMatrix();
+  translate(109, -33, 336);
+  desenhaRosto();
+  popMatrix();
+  
+  popMatrix();
+}
 
 int[] controleCamera(int X, int Y, int Z){
   int S=10;//sensibilidade do movimento;
@@ -161,46 +213,46 @@ void quina(int pX, int pY, int pZ, int lX, int lY, int lZ, float rX, float rY, f
   beginShape();
   vertex(0,0,-lZ);
   vertex(0,-lY,0);
-  vertex(lX,0,-lZ); //<>// //<>// //<>// //<>// //<>// //<>//
+  vertex(lX,0,-lZ); //<>// //<>// //<>// //<>// //<>// //<>// //<>//
   endShape();
-   //<>// //<>//
-  beginShape(); //<>// //<>//
-  vertex(0,-lY,0); //<>// //<>//
+   //<>// //<>// //<>//
+  beginShape(); //<>// //<>// //<>//
+  vertex(0,-lY,0); //<>// //<>// //<>//
   vertex(lX,0,0);
   vertex(lX,0,-lZ);
   endShape();
   
   beginShape();
-  vertex(0,-lY,0); //<>// //<>// //<>// //<>//
-  vertex(lX,0,0); //<>// //<>// //<>// //<>//
+  vertex(0,-lY,0); //<>// //<>// //<>// //<>// //<>//
+  vertex(lX,0,0); //<>// //<>// //<>// //<>// //<>//
   vertex(0,0,0);
-  endShape(); //<>// //<>//
-   //<>// //<>//
+  endShape(); //<>// //<>// //<>//
+   //<>// //<>// //<>//
   beginShape();
-  vertex(0,0,0); //<>// //<>// //<>// //<>// //<>//
-  vertex(0,0,-lZ); //<>// //<>//
-  vertex(lX,0,-lZ); //<>//
-  vertex(lX,0,0); //<>//
-  endShape(); //<>//
+  vertex(0,0,0); //<>// //<>// //<>// //<>// //<>// //<>//
+  vertex(0,0,-lZ); //<>// //<>// //<>//
+  vertex(lX,0,-lZ); //<>// //<>//
+  vertex(lX,0,0); //<>// //<>//
+  endShape(); //<>// //<>//
 
   popMatrix();
-} //<>// //<>//
+} //<>// //<>// //<>//
 
 void drawCylinder( int pX, int pY, int pZ, int sides, float r, float h, float rX, float rY, float rZ)
-{ //<>// //<>//
-    pushMatrix(); //<>// //<>//
+{ //<>// //<>// //<>//
+    pushMatrix(); //<>// //<>// //<>//
     translate(pX,pY,pZ);
-    rotateX(rX*QUARTER_PI); //<>//
-    rotateY(rY*QUARTER_PI); //<>//
+    rotateX(rX*QUARTER_PI); //<>// //<>//
+    rotateY(rY*QUARTER_PI); //<>// //<>//
     rotateZ(rZ*QUARTER_PI);
-    float angle = 360 / sides; //<>//
-    float halfHeight = h / 2; //<>//
+    float angle = 360 / sides; //<>// //<>//
+    float halfHeight = h / 2; //<>// //<>//
     // draw top shape
     beginShape();
     for (int i = 0; i < sides; i++) {
         float x = cos( radians( i * angle ) ) * r;
         float y = sin( radians( i * angle ) ) * r;
-        vertex( x, y, -halfHeight); //<>//
+        vertex( x, y, -halfHeight); //<>// //<>//
     }
     endShape(CLOSE);
     // draw bottom shape
@@ -298,6 +350,48 @@ void botaoFreq(float s){
   fill(152,149,142);
   drawCylinder(573,40, 290, 8,18,92,0.7,0.0,s);
   }
+  
+  void desenhaRosto() {
+  desenhaOlhosAbertos();
+  desenhaBocaAnimada();
+}
+
+void desenhaOlhosAbertos() {
+  fill(250);
+  stroke(0);
+  strokeWeight(5);
+  ellipse(180, 150, 80, 80);  // Olho esquerdo
+  translate(0, 0, 0.5);
+  fill(0);
+  ellipse(180, 162, 40, 40);  // Pupila olho esquerdo
+  translate(0, 0, 1);
+  fill(255);
+  ellipse(186, 169, 20, 20);  // Brilho olho esquerdo
+  
+  translate(-14, 0, 0);
+  
+  fill(250);
+  stroke(0);
+  strokeWeight(5);
+  ellipse(320, 150, 80, 80);  // Olho direito
+  translate(0, 0, 0.5);
+  fill(0);
+  ellipse(320, 160, 40, 40);  // Pupila olho direito
+  translate(0, 0, 1);
+  fill(255);
+  ellipse(314, 169, 20, 20);  // Brilho olho direito
+}
+
+void desenhaBocaAnimada() {
+  float time = millis() / 1000.0;
+  float smileOffset = sin(time) * 0;
+
+  fill(255, 0, 0);
+  stroke(0);
+  strokeWeight(5);
+  arc(boca_width, boca_hight + smileOffset, 130, 60, 0, PI);  // Boca animada
+  line(boca_width - 65, boca_hight + smileOffset, boca_width + 65, boca_hight + smileOffset);  // Linha da boca
+}
   
   
   
