@@ -63,7 +63,7 @@ float selectorMin = -120; // Limite mínimo para o movimento do cursor
 float selectorMax = 120;  // Limite máximo para o movimento do cursor
 PFont fonte;
 float time = 0; // Controla o tempo para a função sin()
-float frequency = 5; // Controla a frequência da pulsação
+float frequency = 2; // Controla a frequência da pulsação
 
 void draw(){
   
@@ -317,7 +317,7 @@ void antenaRaio(){
 void raioEfect(){ //<>// //<>// //<>// //<>// //<>//
     //<>// //<>// //<>// //<>// //<>//
   // Calcula o valor de brilho baseado na função sin //<>// //<>// //<>// //<>// //<>//
-  float brightness = map(sin(frequency), -1, 1, 100, 255); //<>// //<>// //<>// //<>// //<>//
+  float brightness = map(sin(TWO_PI * frequency * millis() / 1000.0), -1, 1, 100, 255); //<>// //<>// //<>// //<>// //<>//
    //<>// //<>// //<>// //<>// //<>//
   pushMatrix(); //<>// //<>// //<>// //<>// //<>//
   rotateZ(1.5*PI/10); //<>// //<>// //<>// //<>// //<>//
@@ -351,7 +351,7 @@ void raioEfect(){ //<>// //<>// //<>// //<>// //<>//
  //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 void raioEfect2(){  //<>// //<>// //<>// //<>// //<>//
   // Calcula o valor de brilho baseado na função sin //<>// //<>// //<>// //<>// //<>//
-  float brightness = map(sin(frequency), -1, 1, 100, 255); //<>// //<>// //<>// //<>// //<>//
+  float brightness = map(sin(TWO_PI * frequency * millis() / 1000.0), -1, 1, 100, 255); //<>// //<>// //<>// //<>// //<>//
    //<>// //<>// //<>// //<>// //<>//
   pushMatrix(); //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
   rotateZ(-13.6*PI/100); //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
