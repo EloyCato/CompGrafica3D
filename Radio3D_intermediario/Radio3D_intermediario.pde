@@ -1,16 +1,22 @@
+/*  Projeto final da disciplina de Computação Grafica;
+
+    Estudantes: Eloy Carlos & Matheus Batista;
+    
+    Legenda:
+              H e K - Movimento horizontal da camera em torno de y;
+              U e J - Movimento em z;
+              
+              Ctrl e Espaço- Movimento em torno de y;
+              
+              RIGHT-> e <-LEFT - Sintonização;
+*/
+
 import ddf.minim.*;      
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
 import ddf.minim.signals.*;
 import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
-
-/*void settings()      
-{
-  System.setProperty("jogl.disable.openglcore","false");
-  size(800, 800, P3D);
-  PImage grade = loadImage("gradeDeAltoFalante.jpg");
-} */
 
 Minim minim;
 AudioPlayer player;
@@ -749,7 +755,7 @@ void desenhaBocaNeutra(){
 }
 
 void desenhaBocaFeliz(){
-  // Boca feliz estilo Mario
+  
   translate(-129, -179, 0);
   //boca.
   strokeWeight(2);
@@ -765,8 +771,7 @@ void desenhaBocaFeliz(){
 }
 
 void desenhaBocaTriste(){
-  // Boca triste estilo Mario
-  //boca.
+ 
   translate(-123, -154, 0);
   strokeWeight(2);
   fill(219, 4, 69);
@@ -781,7 +786,7 @@ void desenhaBocaTriste(){
 }
 
 void desenhaOlhosFechados() {
-  // Olhos fechados estilo Mario
+  
   fill(255);
   stroke(0);
   strokeWeight(5);
